@@ -3,7 +3,7 @@ local meld = require "__core__.lualib.meld"
 local util = require "__core__.lualib.util"
 local attractors = require "attractor-values"
 
--- Dont update all at once, nor in consequent ticks, but in groups every UPDATE_INTERVAL/UPDATE_GROUPS ticks.
+-- Dont update all at once, nor in consequent ticks (spikes are probably better than prolonged freezes), but in groups every UPDATE_INTERVAL/UPDATE_GROUPS ticks.
 -- Each attractor is updated every UPDATE_INTERVAL ticks
 local UPDATE_INTERVAL = 120
 local UPDATE_GROUPS = 10
@@ -28,9 +28,9 @@ local function is_attractor(name)
     end
 end
 
----@param force LuaForce
-local function get_all_attractors(force)
-    return storage.attractors[force.index]
+---@param force_index integer
+local function get_all_attractors(force_index)
+    return storage.attractors[force_index] or {}
 end
 
 script.on_nth_tick(UPDATE_INTERVAL/UPDATE_GROUPS, function(event)
@@ -39,7 +39,7 @@ script.on_nth_tick(UPDATE_INTERVAL/UPDATE_GROUPS, function(event)
     end
     local i = 0
     for _, force in pairs(game.forces) do
-        local entites = get_all_attractors(force)
+        local entites = get_all_attractors(force.index)
         for _, entity in pairs(entites) do
             i = i + 1
             if (not entity.valid) or (not entity.active) or (entity.status ~= defines.entity_status.working) then goto next_attractor end
@@ -112,12 +112,13 @@ script.on_nth_tick(5, function (event)
         if storage.show_attractor_range[player.index] then
             should_display_range = true
         end
-
+        
         if should_display_range then
             local force = player.force
-            for _, entity in pairs(get_all_attractors(force)) do
-                if not entity or not entity.valid then return end
-                table.insert(storage.map_tags, force.add_chart_tag(player.surface, {position = entity.position, icon = {type = "virtual", name = "attractor-range-1"}}))
+            for _, entity in pairs(get_all_attractors(force.index)) do
+                if entity and entity.valid then
+                    table.insert(storage.map_tags, force.add_chart_tag(player.surface, {position = entity.position, icon = {type = "virtual", name = "attractor-range-1"}}))
+                end
             end
         end
     end
