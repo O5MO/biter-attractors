@@ -116,8 +116,8 @@ data:extend{
         order = "g[biter-attractor-1]",
         energy_required = 8,
         ingredients = {
-            {type = "item", name = "steel-plate", amount = 50},
-            {type = "item", name = "iron-stick", amount = 100},
+            {type = "item", name = "steel-plate", amount = 100},
+            {type = "item", name = "iron-stick", amount = 200},
             {type = "item", name = "pipe", amount = 50},
             {type = "item", name = "stone-brick", amount = 50},
             -- {type = "item", name = "iron-plate", amount = 20},
@@ -199,7 +199,7 @@ data:extend{
         energy_usage = "5MW",
         energy_per_sector = "5MW",
         energy_per_nearby_scan = "500kW",
-        max_distance_of_sector_revealed = 0,
+        max_distance_of_sector_revealed = 5,
         max_distance_of_nearby_sector_revealed = 5,
 
         connects_to_other_radars = false,
