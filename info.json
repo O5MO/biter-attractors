@@ -1,0 +1,12 @@
+{
+  "name": "biter-attractors",
+  "version": "0.1.0",
+  "title": "Biter Attractors",
+  "author": "O5MO",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.41",
+    "biter-attractor-graphics >= 0.1.0"
+  ],
+  "description": "Adds giant towers that attract enemies in a large radius."
+}

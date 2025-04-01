@@ -1,0 +1,20 @@
+-- Safe to delete, just some temp idea code
+
+-- local meld = require "__core__.lualib.meld"
+-- local new = table.deepcopy(data.raw['straight-rail']['straight-rail'])
+-- new.name = "new-rail"
+-- data:extend{
+--     new
+-- }
+-- data.raw['straight-rail']['straight-rail'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['half-diagonal-rail']['half-diagonal-rail'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['curved-rail-a']['curved-rail-a'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['curved-rail-b']['curved-rail-b'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['legacy-straight-rail']['legacy-straight-rail'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['legacy-curved-rail']['legacy-curved-rail'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['rail-ramp']['dummy-rail-ramp'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['elevated-curved-rail-a']['dummy-elevated-curved-rail-a'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['elevated-curved-rail-b']['dummy-elevated-curved-rail-b'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['elevated-straight-rail']['dummy-elevated-straight-rail'].collision_mask = {layers = {train = true, water_tile = true}}
+-- data.raw['elevated-half-diagonal-rail']['dummy-elevated-half-diagonal-rail'].collision_mask = {layers = {train = true, water_tile = true}}
+-- -- data.raw[][].collision_mask = {layers = {train = true}}
