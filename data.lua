@@ -1,20 +1,9 @@
 local util = require "__core__.lualib.util"
 local attractors = require "attractor-values"
+require "prototypes.tags"
 
+make_range_icons("biter-attractor-1")
 data:extend{
-    {
-        type = "virtual-signal",
-        name = "attractor-range-1",
-        icons = {
-            {
-                icon = "__biter-attractors__/graphics/circle.png",
-                icon_size = 1024,
-                scale = 200/16 * 64/1024,
-                draw_background = false
-            }
-        },
-        hidden = true,
-    },
     {
         type = "shortcut",
         name = "ba-show-attractor-range",

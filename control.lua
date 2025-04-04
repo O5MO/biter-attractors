@@ -1,7 +1,9 @@
+local attractors = require "attractor-values"
+require "scripts.common"
 require "scripts.cursor"
+require "scripts.tags"
 local meld = require "__core__.lualib.meld"
 local util = require "__core__.lualib.util"
-local attractors = require "attractor-values"
 
 -- Dont update all at once, nor in consequent ticks (spikes are probably better than prolonged freezes), but in groups every UPDATE_INTERVAL/UPDATE_GROUPS ticks.
 -- Each attractor is updated every UPDATE_INTERVAL ticks
@@ -13,6 +15,7 @@ local function init_storage()
     storage.show_attractor_range = storage.show_attractor_range or {}
     storage.attractors = storage.attractors or {}
     storage.active_group = storage.active_group or 0
+    storage.ghost_attractors = storage.ghost_attractors or {}
 end
 script.on_init(function (event)
     init_storage()
@@ -20,18 +23,6 @@ end)
 script.on_configuration_changed(function (event)
     init_storage()
 end)
-
--- Returns whether the entity is an attractor
-local function is_attractor(name)
-    if attractors[name] then
-        return true
-    end
-end
-
----@param force_index integer
-local function get_all_attractors(force_index)
-    return storage.attractors[force_index] or {}
-end
 
 ---@param command Command
 ---@return boolean
@@ -56,7 +47,7 @@ local function is_command_valid(command)
 end
 
 script.on_nth_tick(UPDATE_INTERVAL/UPDATE_GROUPS, function(event)
-    if script.active_mods["debugadapter"] then
+    if remote.interfaces["profiler"] then
         remote.call("profiler", "dump")
     end
     local i = 0
@@ -114,49 +105,6 @@ script.on_nth_tick(UPDATE_INTERVAL/UPDATE_GROUPS, function(event)
     storage.active_group = (storage.active_group + 1) % UPDATE_GROUPS
 end)
 
--- Update map tags
--- TODO: use selected event?
-script.on_nth_tick(5, function (event)
-    for i, tag in pairs(storage.map_tags) do
-        tag.destroy()
-        table.remove(storage.map_tags, i)
-    end
-    for _, player in pairs(game.players) do
-        local should_display_range = false
-        local selected = player.selected
-        if selected and selected.valid and is_attractor(selected.name) then
-            should_display_range = true
-        end
-        local cursor_stack = player.cursor_stack
-        local cursor_ghost = player.cursor_ghost
-        if (cursor_stack and cursor_stack.valid_for_read and is_attractor(cursor_stack.name)) or (cursor_ghost and is_attractor(cursor_ghost.name.name)) then
-            should_display_range = true
-            local cursor_position = get_cursor_position(player)
-            local force = player.force
-            table.insert(storage.map_tags, force.add_chart_tag(player.surface, {position = cursor_position, icon = {type = "virtual", name = "attractor-range-1"}}))
-        end
-        if storage.show_attractor_range[player.index] then
-            should_display_range = true
-        end
-        
-        if should_display_range then
-            local force = player.force
-            for _, entity in pairs(get_all_attractors(force.index)) do
-                if entity and entity.valid then
-                    table.insert(storage.map_tags, force.add_chart_tag(player.surface, {position = entity.position, icon = {type = "virtual", name = "attractor-range-1"}}))
-                end
-            end
-        end
-    end
-end)
-
-script.on_event(defines.events.on_lua_shortcut, function (event)
-    if not event.prototype_name == "ba-show-attractor-range" then return end
-    local player = game.players[event.player_index]
-    player.set_shortcut_toggled("ba-show-attractor-range", not storage.show_attractor_range[event.player_index])
-    storage.show_attractor_range[event.player_index] = not storage.show_attractor_range[event.player_index]
-end)
-
 script.on_event(defines.events.on_script_trigger_effect, function (event)
     local entity = event.cause_entity
     if not entity or not is_attractor(entity.name) then return end
@@ -170,9 +118,7 @@ script.on_event(defines.events.on_script_trigger_effect, function (event)
         target = entity,
         surface = entity.surface,
     }
-    storage.attractors[entity.force_index] = storage.attractors[entity.force_index] or {}
-    storage.attractors[entity.force_index][entity.unit_number] = entity
-    script.register_on_object_destroyed(entity)
+    add_attractor(entity)
 end)
 
 script.on_event(defines.events.on_object_destroyed, function (event)
@@ -182,6 +128,10 @@ script.on_event(defines.events.on_object_destroyed, function (event)
         storage.attractors[force_index] = storage.attractors[force_index] or {}
         if storage.attractors[force_index][event.useful_id] then
             table.remove(storage.attractors[force_index], event.useful_id)
+        end
+        storage.ghost_attractors[force_index] = storage.ghost_attractors[force_index] or {}
+        if storage.ghost_attractors[force_index][event.useful_id] then
+            table.remove(storage.ghost_attractors[force_index], event.useful_id)
         end
     end
 end)

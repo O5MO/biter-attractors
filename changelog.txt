@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: ????
+  Features:
+    - Range visualisations now display different colors based on whether attractor is working, not working or is a ghost. Ghosts now also show range visualisations
+  Bugfixes:
+    - Fixed displaying duplicate range visualisations
+---------------------------------------------------------------------------------------------------
 Version: 0.1.1
 Date: 04.04.2025
   Changes:
