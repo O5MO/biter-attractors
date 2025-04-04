@@ -1,6 +1,5 @@
 local attractors = require "attractor-values"
 require "scripts.common"
-require "scripts.cursor"
 require "scripts.tags"
 local meld = require "__core__.lualib.meld"
 local util = require "__core__.lualib.util"

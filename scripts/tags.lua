@@ -1,3 +1,5 @@
+require "scripts.cursor"
+
 ---@enum tag_type
 local tag_type = {
     enabled = "enabled",
@@ -23,7 +25,7 @@ script.on_nth_tick(5, function (event)
     for _, player in pairs(game.players) do
         local should_display_range = false
         local selected = player.selected
-        if selected and selected.valid and is_attractor(selected.name) then
+        if selected and selected.valid and (is_attractor(selected.name) or selected.type == "entity-ghost" and is_attractor(selected.ghost_name)) then
             should_display_range = true
         end
         local cursor_stack = player.cursor_stack
