@@ -33,6 +33,28 @@ local function get_all_attractors(force_index)
     return storage.attractors[force_index] or {}
 end
 
+---@param command Command
+---@return boolean
+local function is_command_valid(command)
+    local type = command.type
+    if type == defines.command.attack then
+        if not command.target then return false end
+    elseif type == defines.command.attack_area then
+        if not command.destination then return false end
+    elseif type == defines.command.flee then
+        if not command.from then return false end
+    elseif type == defines.command.group then
+        if not command.group then return false end
+    elseif type == defines.command.build_base then
+        if not command.destination then return false end
+    elseif type == defines.command.compound then
+        for _, command2 in pairs(command.commands) do
+            if not is_command_valid(command2) then return false end
+        end
+    end
+    return true
+end
+
 script.on_nth_tick(UPDATE_INTERVAL/UPDATE_GROUPS, function(event)
     if script.active_mods["debugadapter"] then
         remote.call("profiler", "dump")
@@ -48,7 +70,7 @@ script.on_nth_tick(UPDATE_INTERVAL/UPDATE_GROUPS, function(event)
             local units = surface.find_entities_filtered{
                 position = entity.position,
                 radius = attractors[entity.name].radius,
-                type = "unit",
+                type = {"unit","spider-unit"},
                 force = "enemy",
                 is_military_target = true,
             }
@@ -77,7 +99,11 @@ script.on_nth_tick(UPDATE_INTERVAL/UPDATE_GROUPS, function(event)
                         -- prefer straight paths?
                     },
                 }
-                if old_distraction then commandable.set_distraction_command(old_distraction) end
+                if old_distraction then
+                    if is_command_valid(old_distraction) then
+                        commandable.set_distraction_command(old_distraction)
+                    end
+                end
                 ::continue::
             end
             -- End of high performance code

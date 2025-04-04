@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: ????
+  Changes:
+    - Pentapods are now also attracted
+  Bugfixes:
+    - Fixed attractor recipe being availible at the start of the game
+    - Fixed crashes due to a base game bug(?) when a returned command is invalid
+---------------------------------------------------------------------------------------------------
 Version: 0.1.0
 Date: 02.04.2025
   Features:

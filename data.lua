@@ -111,6 +111,7 @@ data:extend{
     {
         type = "recipe",
         name = "biter-attractor-1",
+        enabled = false,
         icon = "__biter-attractor-graphics__/graphics/tower-1-icon-mip.png",
         icon_size = 64,
         order = "g[biter-attractor-1]",
@@ -120,8 +121,6 @@ data:extend{
             {type = "item", name = "iron-stick", amount = 200},
             {type = "item", name = "pipe", amount = 50},
             {type = "item", name = "stone-brick", amount = 50},
-            -- {type = "item", name = "iron-plate", amount = 20},
-            -- {type = "item", name = "copper-plate", amount = 10},
         },
         results = {
             {type = "item", name = "biter-attractor-1", amount = 1},
