@@ -66,7 +66,7 @@ script.on_event(defines.events.on_lua_shortcut, function (event)
     storage.show_attractor_range[event.player_index] = not storage.show_attractor_range[event.player_index]
 end)
 
--- Detect ghosts to enable range visualisations of ghosts
+-- Detect ghosts to enable range visualizations of ghosts
 script.on_event(defines.events.on_built_entity, function (event)
     local entity = event.entity
     if entity.type ~= "entity-ghost" then return end

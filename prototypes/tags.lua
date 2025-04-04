@@ -10,7 +10,7 @@ function make_range_icons(name)
         {
             type = "virtual-signal",
             name = name.."-range-enabled",
-            localised_name = "virtual-signal-name.attractor-range-visualisation",
+            localised_name = {"virtual-signal-name.attractor-range-visualization"},
             icons = {
                 {
                     icon = "__biter-attractors__/graphics/circle.png",
@@ -25,7 +25,7 @@ function make_range_icons(name)
         {
             type = "virtual-signal",
             name = name.."-range-disabled",
-            localised_name = "virtual-signal-name.attractor-range-visualisation",
+            localised_name = {"virtual-signal-name.attractor-range-visualization"},
             icons = {
                 {
                     icon = "__biter-attractors__/graphics/circle.png",
@@ -40,7 +40,7 @@ function make_range_icons(name)
         {
             type = "virtual-signal",
             name = name.."-range-ghost",
-            localised_name = "virtual-signal-name.attractor-range-visualisation",
+            localised_name = {"virtual-signal-name.attractor-range-visualization"},
             icons = {
                 {
                     icon = "__biter-attractors__/graphics/circle.png",
